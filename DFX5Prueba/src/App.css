@@ -1,0 +1,70 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.App {
+  text-align: center;
+}
+
+.navbar {
+  background-color: rgb(87, 10, 114);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 20px; /* Contorno redondeado */
+  background: linear-gradient(to right, rgba(87, 10, 114, 0.8), rgba(87, 10, 114, 1));
+  overflow: hidden;
+  position: relative; /* Necesario para el pseudo-elemento */
+
+  /* Pseudo-elemento para el contorno luminoso */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    z-index: -1;
+  }
+}
+
+.logo {
+  height: 50px;
+}
+
+.logo img {
+  height: 100%;
+  width: auto;
+  vertical-align: middle;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar li {
+  margin-right: 20px;
+}
+
+.navbar li a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar li a:hover {
+  background-color: #555;
+}

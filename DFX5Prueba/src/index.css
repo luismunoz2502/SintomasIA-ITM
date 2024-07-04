@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+:root {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  background-image: url('https://www.blogdelfotografo.com/wp-content/uploads/2021/12/Fondo_Negro_5.webp'); /* URL de tu imagen de fondo */
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  height: 100vh; 
+  margin: 0; 
+  padding: 0; 
+}
+
+label {
+  display: block;
+  color: white; 
+}
+
+.form {
+  width: 400px;
+  margin: 0 auto;
+}
+
+input[type="text"],
+input[type="password"] {
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 5px 0 10px 0;
+  background-color: rgb(87, 10, 114); 
+  color: white; 
+  border: 1px solid white; 
+}
+
+input[type="button"],
+button {
+  background-color: rgb(87, 10, 114); 
+  padding: 10px;
+  border: 1px solid white; 
+  min-width: 100px;
+  border-radius: 5px;
+  color: white; 
+}
+
+nav {
+  background-color: #eee; 
+}
+
+nav ul {
+  margin: 0;
+}
+
+nav ul li {
+  display: inline-block;
+  padding: 10px;
+}
+
+a {
+  color: white; 
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(115, 34, 144);
+}
+
+.dashboard {
+  width: 500px;
+  margin: auto;
+  background-color: rgb(87, 10, 114); 
+  color:white; 
+}
+
+.errorMessage {
+  background-color: rgb(242, 222, 222); 
+  color: rgb(169, 68, 66); 
+  padding: 10px;
+}
+
+h1 {
+  color:white; 
+
+}
+.welcome-message {
+  position: absolute;
+  top: 50%; /* Centra verticalmente */
+  left: 50%; /* Centra horizontalmente */
+  transform: translate(-50%, -50%); /* Centra completamente */
+  text-align: center;
+  color: white;
+}
+
+.welcome-message h1 {
+  font-size: 5.5rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-message p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
