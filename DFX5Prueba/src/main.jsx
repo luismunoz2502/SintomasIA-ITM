@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import SignUp from './Routes/signup.jsx';
 import Dashboard from './Routes/dashboard.jsx';
 import Login from './Routes/Login.jsx';
@@ -16,26 +16,22 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/Login',
+        path: '/login', // Corregido: agregado prefijo '/'
         element: <Login />,
       },
       {
-        path: '/signup',
+        path: '/signup', // Corregido: agregado prefijo '/'
         element: <SignUp />,
       },
       {
         path: '/',
         element: <ProtectedRoute />,
-        children : [
+        children: [
           {
-            path:"/dashboard",
-            element:<Dashboard/>
-          }
-
-
-        ]
-
-
+            path: '/dashboard', // Corregido: agregado prefijo '/'
+            element: <Dashboard />,
+          },
+        ],
       },
     ],
   },
@@ -44,10 +40,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-
-    <RouterProvider router={router} />
-
+      <RouterProvider router={router} />
     </AuthProvider>
-   
   </React.StrictMode>,
 );

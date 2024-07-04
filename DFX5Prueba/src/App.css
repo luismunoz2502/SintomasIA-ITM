@@ -68,3 +68,144 @@
 .navbar li a:hover {
   background-color: #555;
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+:root {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  background-image: url('https://www.blogdelfotografo.com/wp-content/uploads/2021/12/Fondo_Negro_5.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background-color: rgb(87, 10, 114);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  background: linear-gradient(to right, rgba(87, 10, 114, 0.8), rgba(87, 10, 114, 1));
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.navbar .logo img {
+  height: 50px;
+  width: auto;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar li {
+  margin-right: 20px;
+}
+
+.navbar li a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar li a:hover {
+  background-color: #555;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.login-form {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-form h1 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgb(87, 10, 114);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  color: rgb(87, 10, 114);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid rgb(87, 10, 114);
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: rgba(87, 10, 114, 0.1);
+  color: rgb(87, 10, 114);
+}
+
+.login-button {
+  width: 100%;
+  background-color: rgb(87, 10, 114);
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: rgb(115, 34, 144);
+}
+
+.welcome-message {
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-message h1 {
+  font-size: 5.5rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-message p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
