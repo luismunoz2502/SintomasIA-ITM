@@ -1,9 +1,16 @@
 import React from 'react';
 import { useState } from "react";
+import { useAuth } from '../../auth/AuthProvider';
+import { Navigate } from 'react-router-dom';
 
 export default function Login() {
   const [Username,setUsername]= useState ("");
   const [Password,setPassword]= useState ("");
+  const auth = useAuth();
+
+  if (auth.isAuthenticated){
+    return <Navigate to = "/dashboard" />
+  }
 
   
   return (

@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css';
@@ -16,11 +17,11 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/login', // Corregido: agregado prefijo '/'
+        path: '/login', 
         element: <Login />,
       },
       {
-        path: '/signup', // Corregido: agregado prefijo '/'
+        path: '/signup',
         element: <SignUp />,
       },
       {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: '/dashboard', // Corregido: agregado prefijo '/'
+            path: '/dashboard', 
             element: <Dashboard />,
           },
         ],
