@@ -19,7 +19,7 @@ function App() {
       <div className="content">
         <Outlet />
         <div className="welcome-message">
-          <h1>Bienvenido a su aplicación</h1>
+          <h2>Bienvenido a su aplicación</h2>
           <p>Disfrute de todas las funcionalidades que ofrecemos.</p>
         </div>
       </div>

@@ -29,14 +29,13 @@ export default function SignUp() {
   
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Something went wrong');
+        throw new Error(errorData.error || 'Todos los campos son obligatorios');
       }
   
       const data = await response.json();
       console.log('User created:', data);
   
-      // Aquí podrías realizar alguna acción adicional después de un registro exitoso,
-      // como redirigir al usuario a otra página o mostrar un mensaje de éxito.
+    
   
     } catch (error) {
       setError(error.message);
