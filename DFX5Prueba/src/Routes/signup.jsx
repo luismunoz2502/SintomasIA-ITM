@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../auth/AuthProvider';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { API_URL } from '../../auth/constants';
 
 export default function SignUp() {
@@ -8,11 +8,30 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const auth = useAuth();
+
+  const goTo = useNavigate();
+
+  function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
+
+    if (!username || !email || !password) {
+      setError('Todos los campos son obligatorios');
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError('El correo electrónico no es válido');
+      return;
+    }
   
     try {
       const response = await fetch(`${API_URL}/signup`, {
@@ -29,14 +48,14 @@ export default function SignUp() {
   
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Todos los campos son obligatorios');
+        throw new Error(errorData.error || 'Ocurrió un error');
+
       }
   
       const data = await response.json();
       console.log('User created:', data);
-  
-    
-  
+      setSuccess('Usuario creado exitosamente');
+      goTo ("/login");
     } catch (error) {
       setError(error.message);
       console.error('Error en la solicitud:', error.message);
@@ -47,6 +66,7 @@ export default function SignUp() {
     return <Navigate to="/dashboard" />;
   }
 
+ 
   return (
     <div className="login-container">
       <form className="signup-form" onSubmit={handleSubmit}>
@@ -65,7 +85,9 @@ export default function SignUp() {
         </div>
         <button type="submit" className="signup-button">Create User</button>
         {error && <p className="error">{error}</p>}
+        {success && <p className="success">{success}</p>}
       </form>
+  
     </div>
   );
 }
