@@ -55,7 +55,7 @@ export default function SignUp() {
       const data = await response.json();
       console.log('User created:', data);
       setSuccess('Usuario creado exitosamente');
-      goTo ("/login");
+      goTo ("/Login");
     } catch (error) {
       setError(error.message);
       console.error('Error en la solicitud:', error.message);
