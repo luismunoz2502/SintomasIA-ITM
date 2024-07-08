@@ -36,7 +36,7 @@ export default function Login() {
       const data = await response.json();
       console.log('Login succesful:', data);
       
-      // Asumiendo que auth.login guarda el token y actualiza el estado de autenticación
+   
       auth.login(data.user, data.accessToken, data.refreshToken);
       navigate('/dashboard');
     } catch (error) {
