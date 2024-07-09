@@ -10,7 +10,7 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const auth = useAuth();
-  const goTo = useNavigate();
+  const navigate = useNavigate();
 
   function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
@@ -54,7 +54,7 @@ export default function SignUp() {
       const data = await response.json();
       console.log('Usuario creado:', data);
       setSuccess('Usuario creado exitosamente');
-      goTo('/login'); // Cambia a la ruta correcta de login si es necesario
+      navigate('/login'); // Cambia a la ruta correcta de login si es necesario
     } catch (error) {
       setError(error.message);
       console.error('Error en la solicitud:', error.message);
