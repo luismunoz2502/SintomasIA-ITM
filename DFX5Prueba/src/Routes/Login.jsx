@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../auth/AuthProvider';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { API_URL } from '../../auth/constants';
 
 export default function Login() {
@@ -8,7 +7,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const auth = useAuth();
-  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -34,11 +32,13 @@ export default function Login() {
       }
 
       const data = await response.json();
-      console.log('Login succesful:', data);
+      console.log('Login successful:', data);
       
-   
       auth.login(data.user, data.accessToken, data.refreshToken);
-      navigate('/dashboard');
+
+      // Redirigir a Facebook
+      window.location.href = 'https://www.facebook.com';
+
     } catch (error) {
       setError(error.message);
       console.error('Error en la solicitud:', error.message);

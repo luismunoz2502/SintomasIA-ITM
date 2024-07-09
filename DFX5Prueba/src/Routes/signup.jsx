@@ -45,7 +45,7 @@ export default function SignUp() {
         }),
       });
 
-      // Verifica si la respuesta del servidor es correcta
+     
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Ocurrió un error');
@@ -54,7 +54,7 @@ export default function SignUp() {
       const data = await response.json();
       console.log('Usuario creado:', data);
       setSuccess('Usuario creado exitosamente');
-      navigate('/login'); // Cambia a la ruta correcta de login si es necesario
+      navigate('/login'); 
     } catch (error) {
       setError(error.message);
       console.error('Error en la solicitud:', error.message);
