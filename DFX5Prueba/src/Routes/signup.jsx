@@ -10,7 +10,6 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const auth = useAuth();
-
   const goTo = useNavigate();
 
   function validateEmail(email) {
@@ -32,30 +31,30 @@ export default function SignUp() {
       setError('El correo electrónico no es válido');
       return;
     }
-  
+
     try {
       const response = await fetch(`${API_URL}/signup`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           username,
           email,
-          password
-        })
+          password,
+        }),
       });
-  
+
+      // Verifica si la respuesta del servidor es correcta
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Ocurrió un error');
-
       }
-  
+
       const data = await response.json();
-      console.log('User created:', data);
+      console.log('Usuario creado:', data);
       setSuccess('Usuario creado exitosamente');
-      goTo ("/Login");
+      goTo('/login'); // Cambia a la ruta correcta de login si es necesario
     } catch (error) {
       setError(error.message);
       console.error('Error en la solicitud:', error.message);
@@ -66,7 +65,6 @@ export default function SignUp() {
     return <Navigate to="/dashboard" />;
   }
 
- 
   return (
     <div className="login-container">
       <form className="signup-form" onSubmit={handleSubmit}>
@@ -83,11 +81,12 @@ export default function SignUp() {
           <label>Password</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <button type="submit" className="signup-button">Create User</button>
+        <button type="submit" className="signup-button">
+          Create User
+        </button>
         {error && <p className="error">{error}</p>}
         {success && <p className="success">{success}</p>}
       </form>
-  
     </div>
   );
 }
