@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios'; 
 import { useAuth } from '../../auth/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../auth/constants';
 
 export default function Login() {
@@ -7,6 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const auth = useAuth();
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -18,29 +21,17 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
+      const response = await axios.post(`${API_URL}/login`, {
+        username,
+        password,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Ocurrió un error');
-      }
+      const { user, accessToken, refreshToken } = response.data;
+      auth.login(user, accessToken, refreshToken);
 
-      const data = await response.json();
-      console.log('Login successful:', data);
-      
-      auth.login(data.user, data.accessToken, data.refreshToken);
-
-      // Redirigir a Facebook
-      window.location.href = 'https://www.facebook.com';
-
+      navigate('/welcome');
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.error || 'Ocurrió un error');
       console.error('Error en la solicitud:', error.message);
     }
   }

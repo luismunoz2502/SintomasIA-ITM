@@ -10,9 +10,15 @@ import Login from './Routes/Login.jsx';
 import ProtectedRoute from './Routes/ProtectedRoute.jsx';
 import { AuthProvider } from '../auth/AuthProvider.jsx';
 
+import Welcome from './Routes/Welcome'
+
 
 const router = createBrowserRouter([
   {
+              
+  
+
+
     path: '/',
     element: <App />,
     children: [
@@ -24,6 +30,11 @@ const router = createBrowserRouter([
         path: '/signup',
         element: <SignUp />,
       },
+      {
+        path: '/welcome',
+        element: <Welcome />,
+      },
+      
       {
         path: '/',
         element: <ProtectedRoute />,
