@@ -11,10 +11,18 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.1.12",
+    "@deepgram/sdk": "^3.4.4",
     "aws-amplify": "^6.3.8",
     "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "form-data": "^4.0.0",
+    "natural": "^7.1.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.52.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "websocket": "^1.0.35"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
