@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "react-router-dom": "^6.24.1"
+    "aws-amplify": "^6.3.8",
+    "react-router-dom": "^6.24.1",
+      "dev": "vite"
   }
+  
 }

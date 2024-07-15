@@ -8,51 +8,61 @@ export default function Welcome() {
   const [submittedText, setSubmittedText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const socketRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const imageUrl = 'https://appian.com/adobe/dynamicmedia/deliver/dm-aid--e21c4555-e474-4ef6-bbb2-293bfb50eca0/logo-dfx5.png?preferwebp=true&width=1200&quality=85';
 
   const activateMicrophone = () => {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      if (!MediaRecorder.isTypeSupported('audio/webm'))
-        return alert('Browser not supported');
-
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-      mediaRecorderRef.current = mediaRecorder;
-
-      const socket = new WebSocket('ws://localhost:3008');
-      socket.onopen = () => {
-        mediaRecorder.addEventListener('dataavailable', async (event) => {
-          if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
-            socket.send(event.data);
-          }
-        });
-        mediaRecorder.start(2500);
-        setIsRecording(true);
-      };
-
-      socket.onmessage = (message) => {
-        const received = JSON.parse(message.data);
-        const transcripts = received.channel.alternatives;
-
-        if (transcripts && transcripts.length > 0) {
-          const bestTranscript = transcripts[0].transcript;
-          setCurrentInput(bestTranscript);
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        if (!MediaRecorder.isTypeSupported('audio/webm')) {
+          return alert('Browser not supported');
         }
-      };
 
-      socket.onclose = () => {
-        console.log('WebSocket connection closed');
-        setIsRecording(false);
-      };
+        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        mediaRecorderRef.current = mediaRecorder;
 
-      socket.onerror = (error) => {
-        console.log('WebSocket error:', error);
-      };
+        const socket = new WebSocket('ws://localhost:3008');
+        socket.onopen = () => {
+          mediaRecorder.addEventListener('dataavailable', (event) => {
+            if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
+              socket.send(event.data);
+            }
+          });
+          mediaRecorder.start(2000);
+          setIsRecording(true);
+        };
 
-      socketRef.current = socket;
-    });
+        socket.onmessage = (message) => {
+          try {
+            const received = JSON.parse(message.data);
+            const transcripts = received.channel.alternatives;
+
+            if (transcripts && transcripts.length > 0) {
+              const bestTranscript = transcripts[0].transcript;
+              setCurrentInput(bestTranscript);
+            }
+          } catch (error) {
+            console.error('Error processing WebSocket message:', error);
+          }
+        };
+
+        socket.onclose = () => {
+          console.log('WebSocket connection closed');
+          setIsRecording(false);
+        };
+
+        socket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          setIsRecording(false);
+        };
+
+        socketRef.current = socket;
+      })
+      .catch((error) => {
+        console.error('Error accessing the microphone:', error);
+      });
   };
 
   const deactivateMicrophone = () => {
@@ -101,7 +111,12 @@ export default function Welcome() {
                 placeholder="Di algo..."
                 disabled={isRecording}
               />
-              <button type='submit' className='submit-button' onClick={handleSubmit} disabled={!currentInput}>
+              <button
+                type='submit'
+                className='submit-button'
+                onClick={handleSubmit}
+                disabled={!currentInput}
+              >
                 Submit
               </button>
             </div>

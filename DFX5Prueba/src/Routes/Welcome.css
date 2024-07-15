@@ -20,6 +20,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 .chat-header {
@@ -90,4 +91,11 @@
 .submit-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+
+
+.user-info span {
+  margin-right: 480px;
+  font-size: 20px; /* Espacio entre el texto y el botón (opcional) */
 }
