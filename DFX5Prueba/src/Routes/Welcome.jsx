@@ -30,7 +30,7 @@ export default function Welcome() {
               socket.send(event.data);
             }
           });
-          mediaRecorder.start(2000);
+          mediaRecorder.start(4000);
           setIsRecording(true);
         };
 
