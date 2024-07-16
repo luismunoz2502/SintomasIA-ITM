@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthProvider';
 import './Welcome.css';
@@ -6,14 +6,22 @@ import { API_URL } from '../../auth/constants';
 
 export default function Welcome() {
   const [currentInput, setCurrentInput] = useState('');
-  const [submittedText, setSubmittedText] = useState('');
-  const [chatGPTResponse, setChatGPTResponse] = useState('');
+  const [messages, setMessages] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const socketRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const imageUrl = 'https://appian.com/adobe/dynamicmedia/deliver/dm-aid--e21c4555-e474-4ef6-bbb2-293bfb50eca0/logo-dfx5.png?preferwebp=true&width=1200&quality=85';
+
+  useEffect(() => {
+    if (user) {
+      fetch(`${API_URL}/chatHistory/${user._id}`)
+        .then(response => response.json())
+        .then(data => setMessages(data.messages || []))
+        .catch(error => console.error('Error fetching chat history:', error));
+    }
+  }, [user]);
 
   const activateMicrophone = () => {
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -37,6 +45,7 @@ export default function Welcome() {
         };
 
         socket.onmessage = (message) => {
+          console.log('Received WebSocket message:', message.data);
           try {
             const received = JSON.parse(message.data);
             const transcripts = received.channel.alternatives;
@@ -84,33 +93,44 @@ export default function Welcome() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmittedText(currentInput); // Muestra el texto en grande
-    
+    const newMessage = {
+      text: currentInput,
+      type: 'user',
+      timestamp: new Date().toLocaleTimeString()
+    };
+
+    setMessages([...messages, newMessage]);
+
     try {
-      const response =  fetch(`${API_URL}/chatgpt`, {
+      const response = await fetch(`${API_URL}/chatgpt`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ submittedText: currentInput }),
-      })
-      .then(r => r.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err))
-      console.log(response.json())
-      console.log(JSON.stringify({ submittedText: currentInput }));
+      });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-       
 
       const data = await response.json();
-      setChatGPTResponse(data.response);
+      const chatGPTMessage = {
+        text: data.response,
+        type: 'chatgpt',
+        timestamp: new Date().toLocaleTimeString()
+      };
+
+      setMessages([...messages, newMessage, chatGPTMessage]);
+
+      await fetch(`${API_URL}/chatHistory/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user._id, messages: [newMessage, chatGPTMessage] }),
+      });
     } catch (error) {
       console.error('Error fetching ChatGPT response:', error);
     }
 
-    setCurrentInput(''); // Limpia el cuadro de texto
+    setCurrentInput('');
   };
 
   return (
@@ -120,16 +140,27 @@ export default function Welcome() {
           <img src={imageUrl} alt="Logo DFX5" />
         </div>
         <div className="user-info">
-          <span>Bienvenido</span>
+          <span>Welcome</span>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </nav>
       <div className="container">
         <div className="chat">
           <div className="chat-header">
-            <h2>Transcripciones</h2>
+            <h2>Transcripts</h2>
           </div>
           <div className="chat-body">
+            <div className="messages">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`message ${msg.type}-message`}
+                >
+                  <p>{msg.text}</p>
+                  <small>{msg.timestamp}</small>
+                </div>
+              ))}
+            </div>
             <div className="input-box">
               <textarea
                 className='journal-input'
@@ -147,26 +178,15 @@ export default function Welcome() {
                 Submit
               </button>
             </div>
-            {submittedText && (
-              <div className="transcription-box">
-                <h1 className="transcription-text">{submittedText}</h1>
-              </div>
-            )}
-            {chatGPTResponse && (
-              <div className="chatgpt-response-box">
-                <h2>Respuesta de ChatGPT</h2>
-                <p>{chatGPTResponse}</p>
-              </div>
-            )}
           </div>
           <div className="chat-footer">
             {!isRecording ? (
               <button onClick={activateMicrophone} className="microphone-button">
-                Activar Micrófono
+                Activate Microphone
               </button>
             ) : (
               <button onClick={deactivateMicrophone} className="microphone-button">
-                Desactivar Micrófono
+                Disable Microphone
               </button>
             )}
           </div>
