@@ -2,10 +2,12 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthProvider';
 import './Welcome.css';
+import { API_URL } from '../../auth/constants';
 
 export default function Welcome() {
   const [currentInput, setCurrentInput] = useState('');
   const [submittedText, setSubmittedText] = useState('');
+  const [chatGPTResponse, setChatGPTResponse] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -30,7 +32,7 @@ export default function Welcome() {
               socket.send(event.data);
             }
           });
-          mediaRecorder.start(4000);
+          mediaRecorder.start(2000);
           setIsRecording(true);
         };
 
@@ -80,9 +82,34 @@ export default function Welcome() {
     navigate('/login');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmittedText(currentInput); // Muestra el texto en grande
+    
+    try {
+      const response =  fetch(`${API_URL}/chatgpt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ submittedText: currentInput }),
+      })
+      .then(r => r.json())
+      .then(data => console.log(data))
+      .catch(err => console.error(err))
+      console.log(response.json())
+      console.log(JSON.stringify({ submittedText: currentInput }));
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+       
+
+      const data = await response.json();
+      setChatGPTResponse(data.response);
+    } catch (error) {
+      console.error('Error fetching ChatGPT response:', error);
+    }
+
     setCurrentInput(''); // Limpia el cuadro de texto
   };
 
@@ -123,6 +150,12 @@ export default function Welcome() {
             {submittedText && (
               <div className="transcription-box">
                 <h1 className="transcription-text">{submittedText}</h1>
+              </div>
+            )}
+            {chatGPTResponse && (
+              <div className="chatgpt-response-box">
+                <h2>Respuesta de ChatGPT</h2>
+                <p>{chatGPTResponse}</p>
               </div>
             )}
           </div>
