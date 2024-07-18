@@ -30,14 +30,13 @@ router.post('/', async (req, res) => {
     }
 
 
-    const accessToken = user.createAccessToken();
-    const refreshToken = user.createRefreshToken();
+
+
 
     
     res.json(
       jsonResponse(200, {
-        accessToken,
-        refreshToken,
+     
         user: {
           id: user._id,
           username: user.username,

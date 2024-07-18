@@ -1,29 +1,29 @@
-require('dotenv').config()
+require('dotenv').config();
+const { Deepgram } = require('@deepgram/sdk');
+const deepgram = new Deepgram(process.env.DG_KEY);
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 3008 });
 
-// Add Deepgram so we can get the transcription
-const { Deepgram } = require('@deepgram/sdk')
-const deepgram = new Deepgram(process.env.DG_KEY)
+wss.on('connection', (ws, req) => {
+  const urlParams = new URLSearchParams(req.url.split('?')[1]);
+  const language = urlParams.get('language') || 'en'; 
+  
 
-// Add WebSocket 
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({ port: 3008 })
+  const deepgramLive = deepgram.transcription.live({
+    interim_results: true,
+    punctuate: false,
+    endpointing: true,
+    vad_turnoff: 200,
+    language: language, // Usar el idioma seleccionado
+  });
 
-// Open WebSocket Connection and initiate live transcription
-wss.on('connection', (ws) => {
-	const deepgramLive = deepgram.transcription.live({
-		interim_results: true,
-		punctuate: false,
-		endpointing: true,
-		vad_turnoff: 500,
-	})
+  deepgramLive.addListener('open', () => console.log('Deepgram connection opened'));
 
-	deepgramLive.addListener('open', () => console.log('dg onopen'))
+  deepgramLive.addListener('error', (error) => console.log({ error }));
 
-	deepgramLive.addListener('error', (error) => console.log({ error }))
+  ws.onmessage = (event) => deepgramLive.send(event.data);
 
-	ws.onmessage = (event) => deepgramLive.send(event.data)
+  ws.onclose = () => deepgramLive.finish();
 
-	ws.onclose = () => deepgramLive.finish()
-
-	deepgramLive.addListener('transcriptReceived', (data) => ws.send(data))
-})
+  deepgramLive.addListener('transcriptReceived', (data) => ws.send(data));
+});

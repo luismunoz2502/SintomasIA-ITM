@@ -26,8 +26,8 @@ export default function Login() {
         password,
       });
 
-      const { user, accessToken, refreshToken } = response.data;
-      auth.login(user, accessToken, refreshToken);
+      const { user } = response.data.body;
+      auth.login(user);
 
       navigate('/welcome');
     } catch (error) {
@@ -37,7 +37,7 @@ export default function Login() {
   }
 
   if (auth.isAuthenticated) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/welcome" />;
   }
 
   return (

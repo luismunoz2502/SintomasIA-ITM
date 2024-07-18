@@ -16,7 +16,7 @@ export default function Welcome() {
 
   useEffect(() => {
     if (user) {
-      fetch(`${API_URL}/chatHistory/${user._id}`)
+      fetch(`${API_URL}/chatHistory/${user.username}`)
         .then(response => response.json())
         .then(data => setMessages(data.messages || []))
         .catch(error => console.error('Error fetching chat history:', error));
@@ -93,46 +93,48 @@ export default function Welcome() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!currentInput.trim()) return;
+  
     const newMessage = {
       text: currentInput,
       type: 'user',
       timestamp: new Date().toLocaleTimeString()
     };
-
-    setMessages([...messages, newMessage]);
-
+  
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+  
     try {
       const response = await fetch(`${API_URL}/chatgpt`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ submittedText: currentInput }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
+  
       const data = await response.json();
       const chatGPTMessage = {
         text: data.response,
         type: 'chatgpt',
         timestamp: new Date().toLocaleTimeString()
       };
-
-      setMessages([...messages, newMessage, chatGPTMessage]);
-
+  
+      setMessages(prevMessages => [...prevMessages, chatGPTMessage]);
+  
       await fetch(`${API_URL}/chatHistory/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user._id, messages: [newMessage, chatGPTMessage] }),
+        body: JSON.stringify({ username: user.username, messages: [newMessage, chatGPTMessage] }),
       });
     } catch (error) {
       console.error('Error fetching ChatGPT response:', error);
     }
-
+  
     setCurrentInput('');
   };
-
+  
   return (
     <div className="welcome-container">
       <nav className="navbar">
@@ -140,7 +142,7 @@ export default function Welcome() {
           <img src={imageUrl} alt="Logo DFX5" />
         </div>
         <div className="user-info">
-          <span>Welcome</span>
+          <span>Welcome, {user?.username}</span>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </nav>
@@ -166,7 +168,7 @@ export default function Welcome() {
                 className='journal-input'
                 value={currentInput}
                 onChange={(e) => setCurrentInput(e.target.value)}
-                placeholder="Di algo..."
+                placeholder="Say something..."
                 disabled={isRecording}
               />
               <button
@@ -190,6 +192,17 @@ export default function Welcome() {
               </button>
             )}
           </div>
+        </div>
+        <div className="sidebar">
+          <h5>Chat History</h5>
+          <ul>
+            {messages.map((msg, index) => (
+              <li key={index} className={`message ${msg.type}-message`}>
+                <p>{msg.text}</p>
+                <small>{msg.timestamp}</small>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

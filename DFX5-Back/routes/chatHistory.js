@@ -1,32 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-// Define el esquema del historial de chat
-const chatSchema = new mongoose.Schema({
-  userId: String,
-  messages: [{
-    text: String,
-    type: String, // 'user' o 'chatgpt'
-    timestamp: { type: Date, default: Date.now }
-  }]
-});
-
-const ChatHistory = mongoose.model('ChatHistory', chatSchema);
+const ChatHistory = require('../models/chatHistory'); 
 
 // Ruta para guardar el historial de chat
 router.post('/save', async (req, res) => {
-  const { userId, messages } = req.body;
+  const { username, messages } = req.body;
+
+  console.log('Datos recibidos para guardar:', { username, messages });
 
   try {
-    let chatHistory = await ChatHistory.findOne({ userId });
+    let chatHistory = await ChatHistory.findOne({ username });
 
     if (chatHistory) {
+      // Actualiza el historial de chat existente
       chatHistory.messages = [...chatHistory.messages, ...messages];
     } else {
-      chatHistory = new ChatHistory({ userId, messages });
+      // Crea un nuevo historial de chat
+      chatHistory = new ChatHistory({ username, messages });
     }
-
+    
     await chatHistory.save();
     res.status(200).json({ message: 'Historial de chat guardado exitosamente' });
   } catch (error) {
@@ -36,11 +28,13 @@ router.post('/save', async (req, res) => {
 });
 
 // Ruta para obtener el historial de chat
-router.get('/:userId', async (req, res) => {
-  const { userId } = req.params;
+router.get('/:username', async (req, res) => {
+  const { username } = req.params;
+
+  console.log('Buscando historial de chat para el usuario:', username);
 
   try {
-    const chatHistory = await ChatHistory.findOne({ userId });
+    const chatHistory = await ChatHistory.findOne({ username });
 
     if (!chatHistory) {
       return res.status(404).json({ error: 'Historial de chat no encontrado' });

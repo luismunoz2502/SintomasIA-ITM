@@ -10,20 +10,23 @@ app.use(cors());
 app.use(express.json());
 
 async function main() {
-  await mongoose.connect(process.env.DB_CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  console.log("Conectado a MongoDB");
+  try {
+    await mongoose.connect(process.env.DB_CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Conectado a MongoDB");
+  } catch (error) {
+    console.error('Error de conexión a MongoDB:', error);
+  }
 }
 
-main().catch(console.error);
+main();
 
-// Import routes
+// Importar y usar rutas
 const chatHistoryRoutes = require('./routes/chatHistory');
 const chatgptRoutes = require('./routes/chatgpt');
 
-// Use routes
 app.use('/api/signup', require('./routes/signup'));
 app.use('/api/login', require('./routes/login'));
 app.use('/api/user', require('./routes/user'));
