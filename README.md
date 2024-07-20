@@ -111,7 +111,7 @@ Si deseas contribuir al proyecto, sigue estos pasos:
 
 
 ## Contacto
-Tu nombre - [@LuisMunoz2502] - Ldavid.munoz@udea.edu.co
+Luis David Muñoz - [@LuisMunoz2502] - Ldavid.munoz@udea.edu.co
 
 ## Reconocimientos
 - [React](https://reactjs.org/)
