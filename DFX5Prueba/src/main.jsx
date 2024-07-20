@@ -7,6 +7,7 @@ import SignUp from './Routes/signup.jsx';
 import Login from './Routes/Login.jsx';
 import { AuthProvider } from '../auth/AuthProvider.jsx';
 import Welcome from './Routes/Welcome';
+import PrivateRoute from './PrivateRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/welcome',
-        element: <Welcome />,
+        element: <PrivateRoute element={<Welcome />} />, // Protege la ruta
       }
     ],
   },
