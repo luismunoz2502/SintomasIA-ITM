@@ -5,7 +5,7 @@ import { useInteractiveActions } from '../logic/useInteractiveActions';
 
 export default function Welcome() {
   const { user, messages, currentInput, isRecording, activateMicrophone, handleSubmit, deactivateMicrophone, setMessages, handleLogout, setCurrentInput } = useInteractiveActions();
-  
+ 
   useEffect(() => {
     if (user) {
       fetch(`${API_URL}/chatHistory/${user.username}`)
@@ -22,6 +22,7 @@ export default function Welcome() {
         .catch(error => console.error('Error fetching chat history:', error));
     }
   }, [user, setMessages]);
+  
 
   return (
     <div className="welcome-container">

@@ -83,46 +83,46 @@ export const useInteractiveActions = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       if (!currentInput.trim()) return;
-  
+    
       const newMessage = { text: currentInput, type: 'user', timestamp: new Date().toISOString() };
-  
-      setMessages(prevMessages => [...prevMessages, newMessage]);
-  
+    
       try {
-          const response = await fetch(`${API_URL}/chatgpt`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ submittedText: currentInput }),
-          });
-  
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-  
-          const data = await response.json();
-          const chatGPTMessage = { text: data.response, type: 'chatgpt', timestamp: new Date().toISOString() };
-  
-          setMessages(prevMessages => [...prevMessages, newMessage, chatGPTMessage]);
-  
-          // Guardar historial de chat
-          const saveResponse = await fetch(`${API_URL}/chatHistory/save`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                  username: user.username,
-                  messages: [...messages.map(msg => msg.text), newMessage.text, chatGPTMessage.text]
-              }),
-          });
-  
-          if (!saveResponse.ok) {
-              throw new Error('Error saving chat history');
-          }
+        const response = await fetch(`${API_URL}/chatgpt`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ submittedText: currentInput }),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        const chatGPTMessage = { text: data.response, type: 'chatgpt', timestamp: new Date().toISOString() };
+    
+        // Solo actualiza el estado después de obtener la respuesta del backend
+        setMessages(prevMessages => [...prevMessages, newMessage, chatGPTMessage]);
+    
+        // Guardar historial de chat
+        const saveResponse = await fetch(`${API_URL}/chatHistory/save`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: user.username,
+            messages: [...messages.map(msg => msg.text), newMessage.text, chatGPTMessage.text]
+          }),
+        });
+    
+        if (!saveResponse.ok) {
+          throw new Error('Error saving chat history');
+        }
       } catch (error) {
-          console.error('Error fetching ChatGPT response or saving chat history:', error);
+        console.error('Error fetching ChatGPT response or saving chat history:', error);
       }
-  
+    
       setCurrentInput('');
     };
+    
 
     return {
         currentInput,

@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const Token = require("../schema/Token");
 const validateToken = require("../auth/validateToken");
 
 router.delete("/", async function (req, res, next) {
