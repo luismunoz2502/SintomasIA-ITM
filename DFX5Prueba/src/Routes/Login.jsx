@@ -1,40 +1,9 @@
-import React, { useState } from 'react';
-import axios from 'axios'; 
-import { useAuth } from '../../auth/AuthProvider';
-import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../auth/constants';
+import { Navigate } from 'react-router-dom';
+import { useLoginUser } from '../logic/useLoginUser';
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const auth = useAuth();
-  const navigate = useNavigate();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError(null);
-
-    if (!username || !password) {
-      setError('Todos los campos son obligatorios');
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${API_URL}/login`, {
-        username,
-        password,
-      });
-
-      const { user } = response.data.body;
-      auth.login(user);
-
-      navigate('/welcome');
-    } catch (error) {
-      setError(error.response?.data?.error || 'Ocurrió un error');
-      console.error('Error en la solicitud:', error.message);
-    }
-  }
+  const { auth, username, password, handleSubmit, setUsername, setPassword } = useLoginUser();
 
   if (auth.isAuthenticated) {
     return <Navigate to="/welcome" />;
@@ -53,7 +22,6 @@ export default function Login() {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <button type="submit" className="login-button">Login</button>
-        {error && <p className="error">{error}</p>}
       </form>
     </div>
   );

@@ -1,19 +1,19 @@
-import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
 import './App.css';
+import { IMAGE_URL } from '../config';
 
 function App() {
   const location = useLocation();
+  if (location.pathname === '/') {
+    return <Navigate to="/login" />;
+  }
   const showNavbar = location.pathname !== '/welcome';
-
-  const imageUrl = 'https://appian.com/adobe/dynamicmedia/deliver/dm-aid--e21c4555-e474-4ef6-bbb2-293bfb50eca0/logo-dfx5.png?preferwebp=true&width=1200&quality=85';
-
   return (
     <div className="App">
       {showNavbar && (
         <nav className="navbar">
           <div className="logo">
-            <img src={imageUrl} alt="Logo DFX5" />
+            <img src={IMAGE_URL} alt="Logo DFX5" />
           </div>
           <ul>
             <li><Link to="/login">Login</Link></li>

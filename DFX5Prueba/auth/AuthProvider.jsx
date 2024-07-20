@@ -1,6 +1,5 @@
-// src/auth/AuthProvider.js
-
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
@@ -14,7 +13,7 @@ export function AuthProvider({ children }) {
   const login = (userData) => {
     setUser(userData);
   };
-  console.log("user",user)
+  
   const logout = () => {
     setUser(null);
   };
@@ -28,3 +27,7 @@ export function AuthProvider({ children }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

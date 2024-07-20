@@ -1,4 +1,4 @@
-import { API_URL } from "../auth/constants";
+import { API_URL } from "../config";
 
 export default async function requestNewAccessToken(refreshToken) {
   const response = await fetch(`${API_URL}/refresh-token`, {

@@ -12,8 +12,11 @@ router.post('/save', async (req, res) => {
     let chatHistory = await ChatHistory.findOne({ username });
 
     if (chatHistory) {
-   
-      chatHistory.messages.push(...messages); 
+      // Solo agregar mensajes nuevos
+      const newMessages = messages.filter(
+        msg => !chatHistory.messages.includes(msg)
+      );
+      chatHistory.messages.push(...newMessages); 
     } else {
       // Crea un nuevo historial de chat
       chatHistory = new ChatHistory({

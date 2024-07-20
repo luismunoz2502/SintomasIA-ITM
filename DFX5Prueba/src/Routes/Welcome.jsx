@@ -1,149 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/AuthProvider';
+import { useEffect } from 'react';
 import './Welcome.css';
-import { API_URL } from '../../auth/constants';
+import { API_URL, IMAGE_URL } from '../../config';
+import { useInteractiveActions } from '../logic/useInteractiveActions';
 
 export default function Welcome() {
-  const [currentInput, setCurrentInput] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [isRecording, setIsRecording] = useState(false);
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const socketRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const imageUrl = 'https://appian.com/adobe/dynamicmedia/deliver/dm-aid--e21c4555-e474-4ef6-bbb2-293bfb50eca0/logo-dfx5.png?preferwebp=true&width=1200&quality=85';
-
+  const { user, messages, currentInput, isRecording, activateMicrophone, handleSubmit, deactivateMicrophone, setMessages, handleLogout, setCurrentInput } = useInteractiveActions();
+  
   useEffect(() => {
     if (user) {
       fetch(`${API_URL}/chatHistory/${user.username}`)
         .then(response => response.json())
         .then(data => {
           const messages = data.messages || [];
-          const validatedMessages = messages.map(msg => ({
-            type: 'user', 
+          const validatedMessages = messages.map((msg, index) => ({
+            type: index % 2 === 0 ? 'user' : 'chatgpt',
             text: msg,
-            timestamp: new Date().toISOString() 
+            timestamp: new Date().toISOString()
           }));
           setMessages(validatedMessages);
         })
         .catch(error => console.error('Error fetching chat history:', error));
     }
-  }, [user]);
-
-  const activateMicrophone = () => {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then((stream) => {
-        if (!MediaRecorder.isTypeSupported('audio/webm')) {
-          return alert('Browser not supported');
-        }
-
-        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-        mediaRecorderRef.current = mediaRecorder;
-
-        const socket = new WebSocket('ws://localhost:3008');
-        socket.onopen = () => {
-          mediaRecorder.addEventListener('dataavailable', (event) => {
-            if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
-              socket.send(event.data);
-            }
-          });
-          mediaRecorder.start(2000);
-          setIsRecording(true);
-        };
-
-        socket.onmessage = (message) => {
-          console.log('Received WebSocket message:', message.data);
-          try {
-            const received = JSON.parse(message.data);
-            const transcripts = received.channel.alternatives;
-
-            if (transcripts && transcripts.length > 0) {
-              const bestTranscript = transcripts[0].transcript;
-              setCurrentInput(bestTranscript);
-            }
-          } catch (error) {
-            console.error('Error processing WebSocket message:', error);
-          }
-        };
-
-        socket.onclose = () => {
-          console.log('WebSocket connection closed');
-          setIsRecording(false);
-        };
-
-        socket.onerror = (error) => {
-          console.error('WebSocket error:', error);
-          setIsRecording(false);
-        };
-
-        socketRef.current = socket;
-      })
-      .catch((error) => {
-        console.error('Error accessing the microphone:', error);
-      });
-  };
-
-  const deactivateMicrophone = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
-    }
-    if (socketRef.current) {
-      socketRef.current.close();
-    }
-    setIsRecording(false);
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!currentInput.trim()) return;
-
-    const newMessage = { text: currentInput, type: 'user', timestamp: new Date().toISOString() };
-
-    setMessages(prevMessages => [...prevMessages, newMessage]);
-
-    try {
-      const response = await fetch(`${API_URL}/chatgpt`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ submittedText: currentInput }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      const chatGPTMessage = { text: data.response, type: 'chatgpt', timestamp: new Date().toISOString() };
-
-      setMessages(prevMessages => [...prevMessages, newMessage, chatGPTMessage]);
-
-      // Guardar historial de chat
-      await fetch(`${API_URL}/chatHistory/save`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: user.username,
-          messages: [...messages.map(msg => msg.text), newMessage.text, chatGPTMessage.text]
-        }),
-      });
-    } catch (error) {
-      console.error('Error fetching ChatGPT response:', error);
-    }
-
-    setCurrentInput('');
-  };
+  }, [user, setMessages]);
 
   return (
     <div className="welcome-container">
       <nav className="navbar">
         <div className="logo">
-          <img src={imageUrl} alt="Logo DFX5" />
+          <img src={IMAGE_URL} alt="Logo DFX5" />
         </div>
         <div className="user-info">
           <span>Welcome, {user?.username}</span>
@@ -158,10 +42,7 @@ export default function Welcome() {
           <div className="chat-body">
             <div className="messages">
               {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message ${msg.type}-message`}
-                >
+                <div key={index} className={`message ${msg.type}-message`}>
                   <p>{msg.text}</p>
                   <small>{new Date(msg.timestamp).toLocaleString()}</small>
                 </div>
