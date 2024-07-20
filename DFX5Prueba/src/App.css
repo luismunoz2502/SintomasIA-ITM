@@ -22,7 +22,7 @@
   overflow: hidden;
   position: relative; /* Necesario para el pseudo-elemento */
 
-  /* Pseudo-elemento para el contorno luminoso */
+
   &::before {
     content: '';
     position: absolute;
@@ -99,6 +99,7 @@ body {
   overflow: hidden;
   position: relative;
   z-index: 1;
+  margin-right: 30px;
 }
 
 .navbar .logo img {
@@ -106,13 +107,7 @@ body {
   width: auto;
 }
 
-.navbar ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
+
 
 .navbar li {
   margin-right: 20px;
@@ -137,7 +132,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 20px;
-  margin-top: 20px;
+  margin-top: 80px;
 }
 
 .login-form, .signup-form {
@@ -266,10 +261,3 @@ h3 {
   background-color: #d32f2f; 
 }
 
-.user-info {
-  align-items: center; 
-  justify-content: center; 
-  
-    font-size: 1rem;
-  
-}

@@ -18,7 +18,15 @@ export default function Welcome() {
     if (user) {
       fetch(`${API_URL}/chatHistory/${user.username}`)
         .then(response => response.json())
-        .then(data => setMessages(data.messages || []))
+        .then(data => {
+          const messages = data.messages || [];
+          const validatedMessages = messages.map(msg => ({
+            type: 'user', 
+            text: msg,
+            timestamp: new Date().toISOString() 
+          }));
+          setMessages(validatedMessages);
+        })
         .catch(error => console.error('Error fetching chat history:', error));
     }
   }, [user]);
@@ -94,47 +102,43 @@ export default function Welcome() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentInput.trim()) return;
-  
-    const newMessage = {
-      text: currentInput,
-      type: 'user',
-      timestamp: new Date().toLocaleTimeString()
-    };
-  
+
+    const newMessage = { text: currentInput, type: 'user', timestamp: new Date().toISOString() };
+
     setMessages(prevMessages => [...prevMessages, newMessage]);
-  
+
     try {
       const response = await fetch(`${API_URL}/chatgpt`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ submittedText: currentInput }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const data = await response.json();
-      const chatGPTMessage = {
-        text: data.response,
-        type: 'chatgpt',
-        timestamp: new Date().toLocaleTimeString()
-      };
-  
-      setMessages(prevMessages => [...prevMessages, chatGPTMessage]);
-  
+      const chatGPTMessage = { text: data.response, type: 'chatgpt', timestamp: new Date().toISOString() };
+
+      setMessages(prevMessages => [...prevMessages, newMessage, chatGPTMessage]);
+
+      // Guardar historial de chat
       await fetch(`${API_URL}/chatHistory/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user.username, messages: [newMessage, chatGPTMessage] }),
+        body: JSON.stringify({
+          username: user.username,
+          messages: [...messages.map(msg => msg.text), newMessage.text, chatGPTMessage.text]
+        }),
       });
     } catch (error) {
       console.error('Error fetching ChatGPT response:', error);
     }
-  
+
     setCurrentInput('');
   };
-  
+
   return (
     <div className="welcome-container">
       <nav className="navbar">
@@ -159,7 +163,7 @@ export default function Welcome() {
                   className={`message ${msg.type}-message`}
                 >
                   <p>{msg.text}</p>
-                  <small>{msg.timestamp}</small>
+                  <small>{new Date(msg.timestamp).toLocaleString()}</small>
                 </div>
               ))}
             </div>
@@ -199,7 +203,7 @@ export default function Welcome() {
             {messages.map((msg, index) => (
               <li key={index} className={`message ${msg.type}-message`}>
                 <p>{msg.text}</p>
-                <small>{msg.timestamp}</small>
+                <small>{new Date(msg.timestamp).toLocaleString()}</small>
               </li>
             ))}
           </ul>

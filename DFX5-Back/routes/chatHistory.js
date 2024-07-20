@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ChatHistory = require('../models/chatHistory'); 
+const ChatHistory = require('../models/chatHistory');
 
 // Ruta para guardar el historial de chat
 router.post('/save', async (req, res) => {
@@ -12,13 +12,16 @@ router.post('/save', async (req, res) => {
     let chatHistory = await ChatHistory.findOne({ username });
 
     if (chatHistory) {
-      // Actualiza el historial de chat existente
-      chatHistory.messages = [...chatHistory.messages, ...messages];
+   
+      chatHistory.messages.push(...messages); 
     } else {
       // Crea un nuevo historial de chat
-      chatHistory = new ChatHistory({ username, messages });
+      chatHistory = new ChatHistory({
+        username,
+        messages
+      });
     }
-    
+
     await chatHistory.save();
     res.status(200).json({ message: 'Historial de chat guardado exitosamente' });
   } catch (error) {

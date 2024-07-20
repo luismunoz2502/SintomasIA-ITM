@@ -6,8 +6,7 @@ const wss = new WebSocket.Server({ port: 3008 });
 
 wss.on('connection', (ws, req) => {
   const urlParams = new URLSearchParams(req.url.split('?')[1]);
-  const language = urlParams.get('language') || 'en'; 
-  
+  const language = urlParams.get('language') || 'en';
 
   const deepgramLive = deepgram.transcription.live({
     interim_results: true,
@@ -17,13 +16,36 @@ wss.on('connection', (ws, req) => {
     language: language, // Usar el idioma seleccionado
   });
 
-  deepgramLive.addListener('open', () => console.log('Deepgram connection opened'));
+  let deepgramOpenPromise = new Promise((resolve) => {
+    deepgramLive.addListener('open', () => {
+      console.log('Deepgram connection opened');
+      resolve();
+    });
+  });
 
   deepgramLive.addListener('error', (error) => console.log({ error }));
 
-  ws.onmessage = (event) => deepgramLive.send(event.data);
+  ws.onmessage = (event) => {
+    deepgramOpenPromise.then(() => {
+      deepgramLive.send(event.data);
+    }).catch(err => {
+      console.error('Failed to send message:', err);
+    });
+  };
 
-  ws.onclose = () => deepgramLive.finish();
+  ws.onclose = () => {
+    deepgramOpenPromise.then(() => {
+      deepgramLive.finish();
+    }).catch(err => {
+      console.error('Failed to finish Deepgram connection:', err);
+    });
+  };
 
-  deepgramLive.addListener('transcriptReceived', (data) => ws.send(data));
+  deepgramLive.addListener('transcriptReceived', (data) => {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(data);
+    } else {
+      console.error('Cannot send transcript, WebSocket connection is not open');
+    }
+  });
 });
