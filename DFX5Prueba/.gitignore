@@ -19,11 +19,11 @@ build/
 # Static files
 public/*.js
 public/*.map
-
-# Permitir imágenes en public
+public/
 !public/*.jpg
 !public/*.png
 !public/*.gif
+
 
 # Test coverage
 coverage/
@@ -78,6 +78,7 @@ dist/
 # Gatsby files
 .cache/
 public
+
 
 # Ember.js specific
 .tmp/
