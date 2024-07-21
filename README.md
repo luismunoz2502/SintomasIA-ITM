@@ -100,16 +100,6 @@ Para usar la aplicación, sigue estos pasos:
 7. Envía el mensaje transcrito para recibir una respuesta generada por ChatGPT.
 8. La respuesta aparecerá en la interfaz de chat.
 
-## Contribución
-Si deseas contribuir al proyecto, sigue estos pasos:
-
-1. Haz un fork del repositorio.
-2. Crea una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -m 'Agregar nueva funcionalidad'`).
-4. Sube tus cambios (`git push origin feature/nueva-funcionalidad`).
-5. Abre un pull request.
-
-
 ## Contacto
 Luis David Muñoz - [@LuisMunoz2502] - Ldavid.munoz@udea.edu.co
 

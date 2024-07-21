@@ -6,7 +6,7 @@ const wss = new WebSocket.Server({ port: 3008 });
 
 wss.on('connection', (ws, req) => {
   const urlParams = new URLSearchParams(req.url.split('?')[1]);
-  const language = urlParams.get('language') || 'en';
+  const language = urlParams.get('language') || 'es'; // Por defecto a español si no se especifica
 
   const deepgramLive = deepgram.transcription.live({
     interim_results: true,
@@ -46,6 +46,6 @@ wss.on('connection', (ws, req) => {
       ws.send(data);
     } else {
       console.error('Cannot send transcript, WebSocket connection is not open');
-    }
-  });
+    }
+  });
 });

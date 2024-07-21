@@ -84,16 +84,17 @@ export default function Welcome() {
           </div>
         </div>
         <div className="sidebar">
-          <h5>Chat History</h5>
-          <ul>
-            {messages.map((msg, index) => (
-              <li key={index} className={`message ${msg.type}-message`}>
-                <p>{msg.text}</p>
-                <small>{new Date(msg.timestamp).toLocaleString()}</small>
-              </li>
-            ))}
-          </ul>
-        </div>
+  <h5>Chat History</h5>
+  <ul>
+    {messages.map((msg, index) => (
+      <li key={index} className={`message ${msg.type}-message ${msg.type === 'user' ? 'user-history-message' : ''}`}>
+        <p>{msg.text}</p>
+        <small>{new Date(msg.timestamp).toLocaleString()}</small>
+      </li>
+    ))}
+  </ul>
+</div>
+
       </div>
     </div>
   );
