@@ -20,6 +20,11 @@ build/
 public/*.js
 public/*.map
 
+# Permitir imágenes en public
+!public/*.jpg
+!public/*.png
+!public/*.gif
+
 # Test coverage
 coverage/
 *.lcov
