@@ -2,7 +2,6 @@ import { Navigate } from 'react-router-dom';
 import { useLoginUser } from '../logic/useLoginUser';
 
 export default function Login() {
-
   const { auth, username, password, handleSubmit, setUsername, setPassword } = useLoginUser();
 
   if (auth.isAuthenticated) {

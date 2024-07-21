@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  /* overflow: hidden; */
+  background-image: url('../public/background.jpg');
+}
+
+
+:root {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -17,11 +35,10 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 20px; /* Contorno redondeado */
+  border-radius: 20px; 
   background: linear-gradient(to right, rgba(87, 10, 114, 0.8), rgba(87, 10, 114, 1));
   overflow: hidden;
-  position: relative; /* Necesario para el pseudo-elemento */
-
+  position: relative; 
 
   &::before {
     content: '';
@@ -36,228 +53,375 @@
   }
 }
 
-.logo {
-  height: 50px;
-}
-
-.logo img {
-  height: 100%;
-  width: auto;
-  vertical-align: middle;
-}
-
-.navbar ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+.app {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  /* height: 100vh;  */
 }
 
-.navbar li {
-  margin-right: 20px;
-}
-
-.navbar li a {
-  color: white;
-  text-decoration: none;
-  padding: 10px 15px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.navbar li a:hover {
-  background-color: #555;
-}
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
-
-:root {
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-body {
-  background-image: url('https://www.blogdelfotografo.com/wp-content/uploads/2021/12/Fondo_Negro_5.webp');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar {
-  background-color: rgb(87, 10, 114);
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  background: linear-gradient(to right, rgba(87, 10, 114, 0.8), rgba(87, 10, 114, 1));
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  margin-right: 30px;
-}
-
-.navbar .logo img {
-  height: 50px;
-  width: auto;
-}
-
-
-
-.navbar li {
-  margin-right: 20px;
-}
-
-.navbar li a {
-  color: white;
-  text-decoration: none;
-  padding: 10px 15px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.navbar li a:hover {
-  background-color: #555;
-}
-
-.login-container {
+.header {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000; 
+  margin-bottom: 30px;
+}
+
+
+.buttonsElements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.buttonsElements li {
   position: relative;
-  z-index: 2;
-  padding: 20px;
-  margin-top: 80px;
+}
+
+.buttonsElements li a {
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 4px;
+  color: white; 
+  transition: all 0.3s ease-in-out; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttonsElements li.active a {
+  color: rgba(255, 255, 255, 0.644); 
+}
+
+.buttonsElements li.active::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.644); 
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  border-radius: 4px;
+  transition: transform 0.3s ease; 
+}
+
+.buttonsElements li a:hover {
+  color: rgba(255, 255, 255, 0.644); 
+}
+
+
+.mainContent {
+  flex: 1; 
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contentHome {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  color:  rgba(255, 255, 255, 0.644); 
+}
+
+.imageLogo {
+  width: 200px;
+  height: auto;
+}
+
+.description {
+  margin-bottom: 30px;
+}
+
+.buttonLearMore  {
+  padding: 15px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; 
+}
+
+.buttonLearMore:hover {
+  background-color: rgba(0, 0, 0, 0.483);
+}
+
+
+.login-container {
+  background-color: rgba(255, 255, 255, 0.479);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
 }
 
 .login-form, .signup-form {
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 20px;
-  width: 300px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form h1, .signup-form h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: white;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .form-group label {
   display: block;
-  color: rgb(87, 10, 114);
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: white;
 }
 
-.form-group input[type="text"],
-.form-group input[type="password"] {
-  width: 100%;
+.form-group input {
+  width: 378px;
   padding: 10px;
-  margin-top: 5px;
-  border: 1px solid rgb(87, 10, 114);
+  border: 1px solid #ddd;
   border-radius: 4px;
-  box-sizing: border-box;
-  background-color: rgba(87, 10, 114, 0.1);
-  color: rgb(87, 10, 114);
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: rgba(0, 0, 0, 0.586);
+  outline: none;
 }
 
 .login-button, .signup-button {
-  width: 100%;
-  background-color: rgb(87, 10, 114);
-  color: white;
+  padding: 10px 20px;
   border: none;
-  padding: 12px;
-  font-size: 1rem;
   border-radius: 4px;
+  background-color: #4f126e;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .login-button:hover, .signup-button:hover {
-  background-color: rgb(115, 34, 144);
+  background-color: #8922c1;
 }
 
-.welcome-message {
-  text-align: center;
-  color: white;
-  margin-top: 20px;
-  position: relative;
-  z-index: 1;
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-.welcome-message h2 {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-}
-
-.welcome-message p {
-  font-size: 1.2rem;
-  line-height: 1.5;
-}
-
-.navbar2 {
-  background-color: rgb(87, 10, 114);
-  color: white;
+.navbar {
+  width: 100%;
+  background-color: #fff;
   padding: 10px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; 
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  background: linear-gradient(to right, rgba(87, 10, 114, 0.8), rgba(87, 10, 114, 1));
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  width: calc(100% - 40px); 
-  margin: 20px auto;
-}
-
-
-
-
-.navbar2 button {
-  background-color: #fff;
-  color: #007bff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.navbar2 button:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-
-.main-content2 {
-  margin-top: 80px;
-  text-align: center;
-}
-
-.main-content2 h1 {
-  font-size: 2.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
-h3 {
 
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.logout-button {
+  padding: 15px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; 
+  display: flex;
+  gap: 10px;
+}
+.login-button:hover {
+  background-color: #f44;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.chat {
+  flex: 3;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.chat-header h2 {
+  margin: 0;
+}
+
+.chat-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  position: relative;
+  max-width: 80%;
+}
+
+.user-message {
+  align-self: flex-start;
+  background-color: #510c74;
   color: white;
 }
-.logout-button {
-  background-color: #f44336; 
-  color: white; 
-  padding: 10px 20px; 
-  border: none; 
+
+.chatgpt-message {
+  align-self: flex-end;
+  background-color: #eee;
+}
+
+.message p {
+  margin: 0;
+}
+
+.message small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: gray;
+}
+
+.input-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-box textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  cursor: pointer; 
+  resize: none;
 }
 
-.logout-button:hover {
-  background-color: #d32f2f; 
+.input-box .submit-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4f126e;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
+.input-box .submit-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.input-box .submit-button:hover:enabled {
+  background-color: #8922c1;
+}
+
+.chat-footer {
+  padding: 20px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+}
+
+.microphone-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.microphone-button:hover {
+  background-color: #0056b3;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.sidebar h5 {
+  margin-top: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 10px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.sidebar ul li p {
+  margin: 0;
+}
+
+.sidebar ul li small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}

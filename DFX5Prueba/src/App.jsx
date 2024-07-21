@@ -1,29 +1,32 @@
-import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { buttonsLinks } from '../config';
 import './App.css';
-import { IMAGE_URL } from '../config';
 
 function App() {
   const location = useLocation();
-  if (location.pathname === '/') {
-    return <Navigate to="/login" />;
-  }
-  const showNavbar = location.pathname !== '/welcome';
+  const showNav = location.pathname !== '/welcome';
+
   return (
-    <div className="App">
-      {showNavbar && (
-        <nav className="navbar">
-          <div className="logo">
-            <img src={IMAGE_URL} alt="Logo DFX5" />
-          </div>
-          <ul>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">SignUp</Link></li>
+    <div className="app">
+      {showNav && (
+        <header className="header">
+          <ul className='buttonsElements'>
+            {
+              buttonsLinks.map((button) => (
+                <li key={button.id} className={location.pathname === button.route ? 'active' : ''}>
+                  <Link to={button.route}>
+                    <i className={button.icon}></i>
+                    <span>{button.name}</span>
+                  </Link>
+                </li>
+              ))
+            }
           </ul>
-        </nav>
+        </header>
       )}
-      <div className="content">
+      <main className="mainContent">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 }

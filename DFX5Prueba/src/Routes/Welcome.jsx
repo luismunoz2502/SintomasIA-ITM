@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import './Welcome.css';
-import { API_URL, IMAGE_URL } from '../../config';
+import { API_URL } from '../../config';
 import { useInteractiveActions } from '../logic/useInteractiveActions';
 
 export default function Welcome() {
@@ -22,17 +21,22 @@ export default function Welcome() {
         .catch(error => console.error('Error fetching chat history:', error));
     }
   }, [user, setMessages]);
+
+  const capitalizeWord = (word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  };
   
 
   return (
     <div className="welcome-container">
       <nav className="navbar">
-        <div className="logo">
-          <img src={IMAGE_URL} alt="Logo DFX5" />
-        </div>
         <div className="user-info">
-          <span>Welcome, {user?.username}</span>
-          <button onClick={handleLogout}>Logout</button>
+          <span>User: {capitalizeWord(user?.username)}</span>
+          <p>Welcome. Start chatting!</p>
+          <button className='logout-button' onClick={handleLogout}>
+            Logout
+          <i className="fas fa-sign-out-alt"></i>
+          </button>
         </div>
       </nav>
       <div className="container">
@@ -70,11 +74,11 @@ export default function Welcome() {
           <div className="chat-footer">
             {!isRecording ? (
               <button onClick={activateMicrophone} className="microphone-button">
-                Activate Microphone
+                <i className="fas fa-microphone"></i> Activate Microphone
               </button>
             ) : (
               <button onClick={deactivateMicrophone} className="microphone-button">
-                Disable Microphone
+                <i className="fas fa-microphone-slash"></i> Disable Microphone
               </button>
             )}
           </div>

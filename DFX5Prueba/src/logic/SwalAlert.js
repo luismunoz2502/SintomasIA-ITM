@@ -5,6 +5,7 @@ export const SwalAlert = (title, text, icon) => {
         title: title,
         text: text,
         icon: icon,
+        confirmButtonColor: icon === 'error' ? '#d33' : '#33d3a3',
         confirmButtonText: 'Ok'
     });
 };
