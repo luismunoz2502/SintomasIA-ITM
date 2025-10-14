@@ -1,4 +1,4 @@
-# DFX5Login
+# SintomasIA
 
 ## Descripción
 Este proyecto se basa en una aplicación web que incluye funcionalidades de login y signup. Después de iniciar sesión, el usuario accede a una interfaz donde puede usar el micrófono para interactuar con la aplicación. La aplicación integra Deepgram para transcribir audio a texto y luego utiliza la API de ChatGPT para generar respuestas basadas en el texto transcrito. El usuario puede ver la respuesta generada en la interfaz de chat después de enviar su mensaje.
